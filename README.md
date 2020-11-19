@@ -3,7 +3,7 @@ IMGUI Skin Browser Package for the Unity 3D Editor
 
 ## Overview
 The Skin Browser can be used to browse the IMGUI styles available in the
-Unity 3D editor to use them in your own editor windows, inspectors or drawers.
+Unity 3D Editor to use them in your own editor windows, inspectors or drawers.
 
 ![Example View](images/ExampleView.png)
 
@@ -24,7 +24,7 @@ Unity 3D editor to use them in your own editor windows, inspectors or drawers.
     ![Add package menu](images/AddPackageMenu.png)
 4. Enter the clone URL
    
-        git@github.com:FrankenBit/SkinBrowser.git
+        https://github.com/FrankenBit/SkinBrowser.git
 
     of the `Skin Browser` repository in the input field and click on the `Add` button
     right next to the input field:
