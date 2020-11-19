@@ -1,0 +1,23 @@
+{
+  "name": "de.frankenbit.skinbrowser",
+  "version": "1.0.0",
+  "displayName": "Skin Browser",
+  "description": "IMGUI Skin Browser Package for the Unity 3D Editor.",
+  "category": "Editor",
+  "unity": "2020.2",
+  "unityRelease": "0b11",
+  "keywords": [
+    "IMGUI",
+    "Skin",
+    "Browser",
+    "Style"
+  ],
+  "author": {
+    "name": "FrankenBit",
+    "email": "info@frankenbit.de",
+    "url": "https://www.frankenbit.de"
+  },
+  "type": "library",
+  "dependencies": {
+  }
+}
