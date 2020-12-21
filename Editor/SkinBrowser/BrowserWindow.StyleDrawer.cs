@@ -17,24 +17,24 @@ namespace FrankenBit.SkinBrowser
     /// </summary>
     public partial class BrowserWindow
     {
-        private sealed class StyleDrawer : IDrawable<GUIStyle>
+        private sealed class StyleDrawer : IDrawable<StyleWithState>
         {
             [NotNull]
-            private readonly IDrawable<GUIStyle> _drawer;
+            private readonly IDrawable<StyleWithState> _drawer;
 
             [NotNull]
             private readonly TileStylesSelector _selector;
 
-            internal StyleDrawer( [NotNull] IDrawable<GUIStyle> drawer, [NotNull] TileStylesSelector selector )
+            internal StyleDrawer( [NotNull] IDrawable<StyleWithState> drawer, [NotNull] TileStylesSelector selector )
             {
                 _drawer = drawer ?? throw new ArgumentNullException( nameof( drawer ) );
                 _selector = selector ?? throw new ArgumentNullException( nameof( selector ) );
             }
 
             /// <inheritdoc />
-            public void Draw( Rect rectangle, GUIStyle item )
+            public void Draw( Rect rectangle, StyleWithState item )
             {
-                _selector.PrepareStyle( item );
+                _selector.PrepareStyle( item.Style );
                 _drawer.Draw( rectangle, item );
             }
         }

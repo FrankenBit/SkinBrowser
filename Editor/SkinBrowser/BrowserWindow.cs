@@ -28,6 +28,8 @@ namespace FrankenBit.SkinBrowser
 
         private SkinStyleFilter _skinFilter;
 
+        private ICurrentValueProvider<bool> _stateProvider;
+
         private Toolbar _header;
 
         private Toolbar _footer;
@@ -108,26 +110,47 @@ namespace FrankenBit.SkinBrowser
             var selectedStyleLabel =
                 new StyleNameLabel( new ClickableSpringLabel( new DeferredStyle( new StyleFactory( "label" ) ) ) );
 
-            SetupBars( textField, selectedStyleLabel );
-            _scrollView = SetupTileScroll( textField, selectedStyleLabel );
-        }
-
-        private void SetupBars( [NotNull] ILayoutDrawable textField, [NotNull] ILayoutDrawable selectedStyleLabel )
-        {
             _skinFilter = new SkinStyleFilter( new FilterField( new SearchField() ) );
+
             SkinSelection skinSelection = SetupSkinSelection( _skinFilter );
             _skinSelection = skinSelection;
 
+            SetupBars( textField, selectedStyleLabel, skinSelection );
+            _scrollView = SetupTileScroll( textField, selectedStyleLabel );
+        }
+
+        private void SetupBars(
+            [NotNull] ILayoutDrawable textField,
+            [NotNull] ILayoutDrawable selectedStyleLabel,
+            [NotNull] SkinSelection skinSelection )
+        {
+            // ReSharper disable once StringLiteralTypo
+            var toolbarButtonStyle = new DeferredStyle( new StyleFactory( @"toolbarbutton" ) );
+            var stateProvider = new ToggleControl( toolbarButtonStyle, new GUIContent( "Active" ) );
+            _stateProvider = stateProvider;
+
             var toolbarStyle = new DeferredStyle( new StyleFactory( "Toolbar" ) );
-            var leftSlot = new CompositeLayoutDrawable( skinSelection, textField );
+            var leftSlot = new CompositeLayoutDrawable( skinSelection, textField, stateProvider );
             _header = new Toolbar( toolbarStyle, leftSlot, _skinFilter );
 
-            var scaleSlider = new ScaleSlider( 55, 0.2f );
-            if ( BrowserSettings.TryGetScale( out float scale ) ) scaleSlider.Current = scale;
-            _scaleSlider = scaleSlider;
-
-            var scaleSlot = new CompositeLayoutDrawable( scaleSlider, new LayoutSpace( 16 ) );
+            CompositeLayoutDrawable scaleSlot = SetupScaleSlot();
             _footer = new Toolbar( toolbarStyle, selectedStyleLabel, scaleSlot );
+        }
+
+        private GridLayout<StyleWithState> SetupGridLayout()
+        {
+            var tileSize = new StyleTileSize( _scaleSlider, new Vector2( 192, 64 ), new Vector2( 256, 276 ) );
+            var skinFilter = new StyleWithStateFilter( _skinFilter, _stateProvider );
+            return new GridLayout<StyleWithState>( skinFilter, tileSize );
+        }
+
+        private CompositeLayoutDrawable SetupScaleSlot()
+        {
+            var scaleSlider = new ScaleSlider( 55, 0.2f ); 
+            if ( BrowserSettings.TryGetScale( out float scale ) ) scaleSlider.Current = scale;
+
+            _scaleSlider = scaleSlider;
+            return new CompositeLayoutDrawable( scaleSlider, new LayoutSpace( 16 ) );
         }
 
         [NotNull]
@@ -138,10 +161,9 @@ namespace FrankenBit.SkinBrowser
             StyleDrawer tileDrawer =
                 SetupTileDrawer( textField, selectedStyleLabel, new Color32( 0x7F, 0xD6, 0xFD, 0xFF ) );
 
-            var tileSize = new StyleTileSize( _scaleSlider, new Vector2( 192, 64 ), new Vector2( 256, 276 ) );
-            var gridLayout = new GridLayout<GUIStyle>( _skinFilter, tileSize );
+            GridLayout<StyleWithState> gridLayout = SetupGridLayout();
+            var gridTileDrawer = new LayoutItemDrawer<StyleWithState>( gridLayout, tileDrawer );
             var pageStyle = new DeferredStyle( new StyleFactory( @"ProjectBrowserIconAreaBg" ) );
-            var gridTileDrawer = new LayoutItemDrawer<GUIStyle>( gridLayout, tileDrawer );
             var verticalLayout = new StyledVerticalLayout( pageStyle, gridTileDrawer );
             return new ScrollView( new ScrollableContent( verticalLayout, gridLayout ) );
         }

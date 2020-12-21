@@ -20,7 +20,7 @@ namespace FrankenBit.SkinBrowser
         /// <summary>
         ///     Draws a <see cref="GUIStyle" /> preview tile in the specified destination rectangle.
         /// </summary>
-        private sealed class StyleTile : IDrawable<GUIStyle>
+        private sealed class StyleTile : IDrawable<StyleWithState>
         {
             private readonly TileGeometry _geometry;
 
@@ -65,19 +65,19 @@ namespace FrankenBit.SkinBrowser
             internal event Action<GUIStyle> Selected;
 
             /// <inheritdoc />
-            public void Draw( Rect rectangle, GUIStyle item )
+            public void Draw( Rect rectangle, StyleWithState item )
             {
                 GUI.backgroundColor = _styles.BackgroundColor;
 
                 Rect frameRectangle = rectangle.TrimBottomBy( _geometry.LabelHeight + _geometry.Spacing );
-                if ( GUI.Button( frameRectangle, GUIContent.none, _styles.FrameStyle ) ) Selected?.Invoke( item );
+                if ( GUI.Button( frameRectangle, GUIContent.none, _styles.FrameStyle ) ) Selected?.Invoke( item.Style );
 
                 Rect labelRectangle = rectangle.BottomPart( _geometry.LabelHeight );
-                GUI.Label( labelRectangle, item.name, _styles.LabelStyle );
+                GUI.Label( labelRectangle, item.Name, _styles.LabelStyle );
 
                 GUI.backgroundColor = Color.white;
                 Rect itemRectangle = frameRectangle.TrimBy( _geometry.Margin );
-                GUI.Box( itemRectangle, _demoContent, item );
+                GUI.Toggle( itemRectangle, item.State, _demoContent, item.Style );
             }
 
             private void HandleChangedDemoContent( [CanBeNull] GUIContent label ) =>
