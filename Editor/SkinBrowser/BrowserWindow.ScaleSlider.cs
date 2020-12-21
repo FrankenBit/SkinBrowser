@@ -54,7 +54,7 @@ namespace FrankenBit.SkinBrowser
             public float Current
             {
                 get => GetNormalizedScale( _scale, _snapWidth );
-                set => _scale = SetNormalizedScale( value, _snapWidth );
+                internal set => _scale = SetNormalizedScale( value, _snapWidth );
             }
 
             /// <inheritdoc />

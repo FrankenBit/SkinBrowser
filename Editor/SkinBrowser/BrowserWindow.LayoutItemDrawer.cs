@@ -15,7 +15,7 @@ namespace FrankenBit.SkinBrowser
     /// </summary>
     public partial class BrowserWindow
     {
-        private class LayoutItemDrawer<T> : ILayoutDrawable
+        private sealed class LayoutItemDrawer<T> : ILayoutDrawable
         {
             [NotNull]
             private readonly IDrawable<T> _itemDrawer;
@@ -23,7 +23,7 @@ namespace FrankenBit.SkinBrowser
             [NotNull]
             private readonly ILayoutDrawable<IDrawable<T>> _layoutDrawer;
 
-            public LayoutItemDrawer(
+            internal LayoutItemDrawer(
                 [NotNull] ILayoutDrawable<IDrawable<T>> layoutDrawer,
                 [NotNull] IDrawable<T> itemDrawer )
             {
