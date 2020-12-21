@@ -65,7 +65,7 @@ namespace FrankenBit.SkinBrowser
                 scale > snapWidth ? ( scale - snapWidth ) / ( 1 - snapWidth ) : 0;
 
             private static float SetNormalizedScale( float scale, float snapWidth ) =>
-                scale > 0 ? scale / ( 1 - snapWidth ) + snapWidth : 0;
+                scale > 0 ? Mathf.Clamp01( scale ) * ( 1 - snapWidth ) + snapWidth : 0;
 
             private void ChangeScale( float scale )
             {
