@@ -1,6 +1,6 @@
 {
     "name": "FrankenBit.Editor.SkinBrowser",
-    "rootNamespace": "",
+    "rootNamespace": "FrankenBit",
     "references": [],
     "includePlatforms": [
         "Editor"
